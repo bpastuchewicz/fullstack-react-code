@@ -90,50 +90,35 @@ function messagesReducer(state = [], action) {
 
 const store = createStore(reducer);
 
-class App extends React.Component {
+const App = () => (
+  <div className='ui segment'>
+    {/* `Thread` changed to `ThreadDisplay` below */}
+    <ThreadTabs />
+    <ThreadDisplay />
+  </div>
+);
+
+const Tabs = (props) => (
+  <div className='ui top attached tabular menu'>
+    {
+      props.tabs.map((tab, index) => (
+        <div
+          key={index}
+          className={tab.active ? 'active item' : 'item'}
+          onClick={() => props.onClick(tab.id)}
+        >
+          {tab.title}
+        </div>
+      ))
+    }
+  </div>
+);
+
+class ThreadTabs extends React.Component {
   componentDidMount() {
     store.subscribe(() => this.forceUpdate());
   }
 
-  render() {
-    const state = store.getState();
-    const activeThreadId = state.activeThreadId;
-    const threads = state.threads;
-    const activeThread = threads.find((t) => t.id === activeThreadId);
-
-    const tabs = threads.map(t => (
-      {
-        title: t.title,
-        active: t.id === activeThreadId,
-        id: t.id,
-      }
-    ));
-
-    return (
-      <div className='ui segment'>
-        <ThreadTabs tabs={tabs} />
-        <Thread thread={activeThread} />
-      </div>
-    );
-  }
-}
-
-const Tabs = (props) => {
-  <div className='ui top attached tabular menu'>
-    {props.map((tab, index) => (
-      <div
-        key={index}
-        className={tab.active ? 'active item' : 'item'}
-        onClick={() => props.onClick(tab.id)}
-      >
-        {tab.title}
-      </div>
-    ))
-    }
-  </div>
-}
-
-class ThreadTabs extends React.Component {
   render() {
     const state = store.getState();
 
@@ -148,20 +133,14 @@ class ThreadTabs extends React.Component {
     return (
       <Tabs
         tabs={tabs}
-        onClick={
-          (id) => {
-            store.dispatch({
-              type: 'OPEN_THREAD',
-              id: id,
-            });
-          }
-        }
+        onClick={(id) => (
+          store.dispatch({
+            type: 'OPEN_THREAD',
+            id: id,
+          })
+        )}
       />
-    )
-  }
-
-  componentDidMount() {
-    store.subscribe(()=> this.forceUpdate())
+    );
   }
 }
 
@@ -176,7 +155,8 @@ class TextFieldSubmit extends React.Component {
     })
   };
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     this.props.onSubmit(this.state.value);
     this.setState({
       value: '',
@@ -186,6 +166,7 @@ class TextFieldSubmit extends React.Component {
   render() {
     return (
       <div className='ui input'>
+        <form onSubmit={this.handleSubmit}>
         <input
           onChange={this.onChange}
           value={this.state.value}
@@ -196,8 +177,9 @@ class TextFieldSubmit extends React.Component {
           className='ui primary button'
           type='submit'
         >
-          Submit
+            Submit
         </button>
+        </form>
       </div>
     )
   }
@@ -215,12 +197,12 @@ const MessageList = (props) => (
           <div className='text'>
             {m.text}
             <span className='metadata'>@{
-              new Intl.DateTimeFormat(
-                'pl-PL',
+              new Intl.DateTimeFormat('pl-Pl',
                 {
                   year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit',
                   minute: '2-digit', second: '2-digit'
-                }).format(m.timestamp)}
+                })
+                .format(m.timestamp)}
             </span>
           </div>
         </div>
