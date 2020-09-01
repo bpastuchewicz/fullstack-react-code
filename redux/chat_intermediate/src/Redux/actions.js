@@ -1,11 +1,11 @@
-function deleteMessage(id) {
+export const deleteMessage = (id) => {
     return {
         type: 'DELETE_MESSAGE',
         id: id,
     };
 }
 
-function addMessage(text, threadId) {
+export const  addMessage = (text, threadId) =>{
     return {
         type: 'ADD_MESSAGE',
         text: text,
@@ -13,7 +13,7 @@ function addMessage(text, threadId) {
     };
 }
 
-function openThread(id) {
+export const openThread =(id)  => {
     return {
         type: 'OPEN_THREAD',
         id: id,
