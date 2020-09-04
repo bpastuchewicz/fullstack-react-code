@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { createStore, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from 'react-redux';
 
 
@@ -10,14 +10,15 @@ import { ThreadTabs } from "./Container/ThreadTabs.js"
 
 //reducers
 import {activeThreadIdReducer,threadsReducer} from "./Redux/Reducer/thread"
+import {forbiddenWordsMiddleware } from "./Redux/Middleware/forbidden_words";
+import {logger} from "./Redux/Middleware/logger"
 
 const reducer = combineReducers({
   activeThreadId: activeThreadIdReducer,
   threads: threadsReducer,
 });
 
-const store = createStore(reducer);
-
+const store = createStore(reducer, applyMiddleware(thunk,forbiddenWordsMiddleware,logger));
 
 const App = () => (
   <div className='ui segment'>

@@ -1,7 +1,8 @@
 import React from 'react';
+import { TextFieldSubmit } from "./TextFieldSubmit.js"
 
 export const Tabs = (props) => (
-    <div className='ui top attached tabular menu'>
+    <div className='ui top attached tabular menu grid'>
         {
             props.tabs.map((tab, index) => (
                 <div
@@ -10,8 +11,13 @@ export const Tabs = (props) => (
                     onClick={() => props.onClick(tab.id)}
                 >
                     {tab.title}
+                    <i className="icon trash" onClick={() => props.onThreadDelete(tab.id)} ></i>
                 </div>
             ))
-        }
+        }  
+        <div className='item icon edit'>
+        <TextFieldSubmit
+            onSubmit={props.onThreadSubmit}
+        /></div>      
     </div>
 );

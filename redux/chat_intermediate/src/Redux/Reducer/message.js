@@ -12,6 +12,15 @@ export const messagesReducer = (state = [], action) => {
         case 'DELETE_MESSAGE': {
             return state.filter(m => m.id !== action.id);
         }
+        case 'EDIT_MESSAGE': {            
+            const newMessage = {
+                text: action.text,
+                timestamp: Date.now(),
+                id: action.id,
+            };
+            return state.filter(m => m.id !== action.id).concat(newMessage)            
+        }
+
         default: {
             return state;
         }

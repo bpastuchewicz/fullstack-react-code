@@ -1,6 +1,6 @@
 import { Tabs } from "../View/Tabs.js"
 import { connect } from 'react-redux';
-import { openThread } from "../Redux/Action/thread";
+import { openThread, addThread, deleteThread  } from "../Redux/Action/thread";
 
 const mapStateToTabsProps = (state) => {
     const tabs = state.threads.map(t => (
@@ -15,13 +15,16 @@ const mapStateToTabsProps = (state) => {
         tabs,
     };
 };
-const mapDispatchToTabsProps = (dispatch) => (
-    {
-        onClick: (id) => (
-            dispatch(openThread(id))
-        ),
-    }
-);
+const mapDispatchToTabsProps = (dispatch) => ({
+  onClick: (id) => dispatch(openThread(id)),
+  onThreadSubmit: (title) => {
+    dispatch(addThread(title));
+  },
+  onThreadDelete: (id) => {
+    dispatch(deleteThread(id));
+  },
+
+});
 
 export const ThreadTabs = connect(
     mapStateToTabsProps,
