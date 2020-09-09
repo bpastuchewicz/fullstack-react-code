@@ -25,11 +25,12 @@ const Album = ({ album }) => (
               - ${album.tracks.length} songs`
             }
           </p>
-          <div
+          <Link
+            to='/albums'
             className='ui left floated large button'
           >
             Close
-          </div>
+          </Link>
         </div>
       </div>
     </div>
