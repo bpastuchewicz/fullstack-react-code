@@ -17,9 +17,16 @@ class Login extends Component {
     client.login().then(() => this.setState({ shouldRedirect: true }));
   };
 
+  redirectPath = () => {
+    const locationState = this.props.location.state;
+    const pathname =
+      locationState && locationState.from && locationState.from.pathname;
+    return pathname || "/albums";
+  };
+
   render() {
     if (this.state.shouldRedirect) {
-      return <Redirect to="/albums" />;
+      return <Redirect to={this.redirectPath()} />;
     } else {
       return (
         <div className="ui one column centered grid">
